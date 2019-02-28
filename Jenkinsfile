@@ -5,7 +5,7 @@ pipeline {
 		package_version = readMavenPom().getVersion()
 		dockerRegistry = "962109799108.dkr.ecr.eu-west-1.amazonaws.com"
 		DOCKER_CACHE_IMAGE_VERSION = "latest"
-		dockerRepo = "spring-petclinic"
+		dockerRepo = "spring-petclinic-b"
 		applicationName = 'spring-petclinic' // Same as artifactId in pom.xml
 		AWS_REGION = "eu-west-1"
 		AWS_ACCOUNT_ID = "962109799108"
