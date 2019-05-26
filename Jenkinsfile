@@ -5,8 +5,8 @@ pipeline {
 		package_version = readMavenPom().getVersion()
 		dockerRegistry = "962109799108.dkr.ecr.eu-west-1.amazonaws.com"
 		DOCKER_CACHE_IMAGE_VERSION = "latest"
-		dockerRepo = "spring-petclinic-b"
-		applicationName = 'spring-petclinic' // Same as artifactId in pom.xml
+		dockerRepo = "smalltestproject"
+		applicationName = 'smalltestproject' // Same as artifactId in pom.xml
 		AWS_REGION = "eu-west-1"
 		AWS_ACCOUNT_ID = "962109799108"
 		kubernetesNode = 'rancher.maddoudou.click'
@@ -15,7 +15,7 @@ pipeline {
     }
 	
     stages {
-	    stage('Prepa baking') {
+/*	    stage('Prepa baking') {
             steps {
                 echo 'Getting previous image ...'
 				sh 'echo \"Si l\'image cache n\'existe pas dans le repo ECR elle est reconstruire, sinon elle est telechargee\"'
@@ -23,11 +23,13 @@ pipeline {
 				sh './build-docker.sh $dockerRepo $DOCKER_CACHE_IMAGE_VERSION dockerfile_basis $AWS_REGION $AWS_ACCOUNT_ID'
             }
         }
+*/
         stage('Build') {
             steps {
                 echo 'Building ...'
 				//sh 'mvn -T 10 -Dmaven.test.skip=true clean install'
-				sh 'mvn -T 1C -Dmaven.test.skip=true clean package'
+				//sh 'mvn -T 1C -Dmaven.test.skip=true clean package'
+				sh 'mvn -T 1C -Dmaven.test.skip=true dependency:purge-local-repository clean package'
             }
         }
 		
@@ -48,6 +50,7 @@ pipeline {
 		stage('OWASP - Dependencies check') {
             steps {
                 echo 'Check OWASP dependencies ...'
+				sh 'mvn dependency-check:purge'
 				sh 'mvn dependency-check:check'
             }
         }
@@ -67,10 +70,10 @@ pipeline {
 */
         stage('Bake') {
             steps {
-			    sh 'echo \"Verification de la presence de l\'image Docker dans la registry locale (elle a du avoir le temps de se reconstruire ou se telecharger)\"'
-				sh 'timeout 60 sh -c \'until docker images | grep $dockerRepo | grep $DOCKER_CACHE_IMAGE_VERSION; do sleep 1; done\''
-				sh 'echo \"Modification du dockerfile pour y indiquer l\'image de base a utiliser pour le build afin de beneficier des layer mis en cache localement\"'
-				sh 'sed -i.bak \"s#BASIS_IMAGE#$dockerRegistry/$dockerRepo:$DOCKER_CACHE_IMAGE_VERSION#g\" dockerfile'
+//			    sh 'echo \"Verification de la presence de l\'image Docker dans la registry locale (elle a du avoir le temps de se reconstruire ou se telecharger)\"'
+//				sh 'timeout 60 sh -c \'until docker images | grep $dockerRepo | grep $DOCKER_CACHE_IMAGE_VERSION; do sleep 1; done\''
+//				sh 'echo \"Modification du dockerfile pour y indiquer l\'image de base a utiliser pour le build afin de beneficier des layer mis en cache localement\"'
+//				sh 'sed -i.bak \"s#BASIS_IMAGE#$dockerRegistry/$dockerRepo:$DOCKER_CACHE_IMAGE_VERSION#g\" dockerfile'
                 echo 'Building Docker image ...'
 				sh '$(aws ecr get-login --no-include-email --region $AWS_REGION)'
 				sh 'docker build --build-arg PACKAGE_VERSION=${package_version} --build-arg APPLICATION_NAME=${applicationName} -t ${dockerRegistry}/${dockerRepo}:${package_version} .'
