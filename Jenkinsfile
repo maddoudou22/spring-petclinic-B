@@ -12,7 +12,7 @@ pipeline {
 		dockerRegistry = "962109799108.dkr.ecr.eu-west-1.amazonaws.com"
 		DOCKER_CACHE_IMAGE_VERSION = "latest"
 		dockerRepo = "springpetclinicb"
-		applicationName = 'springpetclinicb' // Same as artifactId in pom.xml
+		applicationName = 'springpetclinicb' // Same as artifactId in the pom.xml
 		AWS_REGION = "eu-west-1"
 		AWS_ACCOUNT_ID = "962109799108"
 		SONAR_ENDPOINT = "http://34.242.148.141:9000"
