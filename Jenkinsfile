@@ -2,8 +2,8 @@ pipeline {
 	agent { 
         node {
             //label '!master'
-			//label 'master'
-			label 'slavespot'
+			label 'master'
+			//label 'slavespot'
         }
     }
 	
@@ -12,7 +12,7 @@ pipeline {
 		dockerRegistry = "962109799108.dkr.ecr.eu-west-1.amazonaws.com"
 		DOCKER_CACHE_IMAGE_VERSION = "latest"
 		dockerRepo = "springpetclinicb"
-		applicationName = 'springpetclinicb' // Same as artifactId in the pom.xml
+		applicationName = 'springpetclinicb' // Same as artifactId in pom.xml
 		AWS_REGION = "eu-west-1"
 		AWS_ACCOUNT_ID = "962109799108"
 		SONAR_ENDPOINT = "http://54.246.183.189:9000"
@@ -20,8 +20,9 @@ pipeline {
 		//EC2_LOCAL_MAVEN_DEPENDENCIES_DIRECTORY = "/var/lib/jenkins"
 		S3_BUCKET_MAVEN_DEPENDENCIES = "s3://jenkinsspotfleetmavencache/Jenkins-Master-slave-SimpleAPI/.m2/"
     }
-	
+
     stages {
+/*
 		stage('Download dependencies from S3') {
             steps {
 				echo 'Get the cached maven dependencies from an S3 bucket ...'
@@ -30,7 +31,7 @@ pipeline {
 			}
         }
 		
-/*	    stage('Prepa baking') {
+	    stage('Prepa baking') {
             steps {
                 echo 'Getting previous image ...'
 				sh 'echo \"Si l\'image cache n\'existe pas dans le repo ECR elle est reconstruire, sinon elle est telechargee\"'
@@ -98,13 +99,14 @@ pipeline {
 				sh 'docker push ${dockerRegistry}/${dockerRepo}:${package_version}'
             }
         }
-		
+/*
 		stage('Dependencies sync') {
             steps {
 				echo 'Copying the maven dependencies to an S3 bucket ...'
 				sh 'aws s3 sync $EC2_LOCAL_MAVEN_DEPENDENCIES_DIRECTORY $S3_BUCKET_MAVEN_DEPENDENCIES'
 			}
         }
+*/
     }
 
 }
