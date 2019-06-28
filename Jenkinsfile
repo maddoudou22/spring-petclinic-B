@@ -119,6 +119,6 @@ pipeline {
 				sh 'aws s3 sync $EC2_LOCAL_MAVEN_DEPENDENCIES_DIRECTORY $S3_BUCKET_MAVEN_DEPENDENCIES'
 			}
         }
-    }
 */
+	}
 }
