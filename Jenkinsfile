@@ -22,7 +22,7 @@ pipeline {
     }
 	
     stages {
-/*
+
 		stage('Download dependencies from S3') {
             steps {
 				echo 'Get the cached maven dependencies from an S3 bucket ...'
@@ -30,7 +30,7 @@ pipeline {
 				sh 'aws s3 sync $S3_BUCKET_MAVEN_DEPENDENCIES $EC2_LOCAL_MAVEN_DEPENDENCIES_DIRECTORY'
 			}
         }
-		
+/*		
 	    stage('Prepa baking') {
             steps {
                 echo 'Getting previous image ...'
@@ -40,7 +40,7 @@ pipeline {
             }
         }
 */
-/*
+
         stage('Build') {
             steps {
                 echo 'Building ...'
@@ -49,7 +49,7 @@ pipeline {
 				sh 'mvn -T 1C -Dmaven.test.skip=true clean package'
             }
         }
-		
+/*		
 		stage('Unit test') {
             steps {
                 echo 'Unit testing ...'
