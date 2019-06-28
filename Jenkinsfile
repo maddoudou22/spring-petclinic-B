@@ -2,8 +2,8 @@ pipeline {
 	agent { 
         node {
             //label '!master'
-			label 'master'
-			//label 'slavespot'
+			//label 'master'
+			label 'slavespot'
         }
     }
 	
@@ -15,14 +15,13 @@ pipeline {
 		applicationName = 'springpetclinicb' // Same as artifactId in pom.xml
 		AWS_REGION = "eu-west-1"
 		AWS_ACCOUNT_ID = "962109799108"
-		SONAR_ENDPOINT = "http://54.246.183.189:9000"
+		SONAR_ENDPOINT = "http://34.242.67.99:9000"
 		EC2_LOCAL_MAVEN_DEPENDENCIES_DIRECTORY = "/home/ubuntu/.m2"
 		//EC2_LOCAL_MAVEN_DEPENDENCIES_DIRECTORY = "/var/lib/jenkins"
 		S3_BUCKET_MAVEN_DEPENDENCIES = "s3://jenkinsspotfleetmavencache/Jenkins-Master-slave-SimpleAPI/.m2/"
     }
-
+/*	
     stages {
-/*
 		stage('Download dependencies from S3') {
             steps {
 				echo 'Get the cached maven dependencies from an S3 bucket ...'
@@ -40,6 +39,7 @@ pipeline {
             }
         }
 */
+/*
         stage('Build') {
             steps {
                 echo 'Building ...'
@@ -55,14 +55,14 @@ pipeline {
 				sh 'mvn -T 1C test'
             }
         }
-/*
+
 		stage('Publish snapshot') {
             steps {
                 echo 'Publising into the snapshot repo ...'
 				sh 'mvn jar:jar deploy:deploy'
             }
         }
-*/		
+		
 		stage('OWASP - Dependencies check') {
             steps {
                 echo 'Check OWASP dependencies ...'
@@ -70,8 +70,20 @@ pipeline {
 				sh 'mvn dependency-check:check'
             }
         }
-		
-		stage('Sonar - Code Quality') {
+*/		
+		stage('Sonar 1') {
+            steps {
+                echo 'Check Code Quality ...'
+				sh 'mvn sonar:sonar -Dsonar.host.url=$SONAR_ENDPOINT' // -Dsonar.dependencyCheck.reportPath=target/dependency-check-report.xml'
+            }
+        }
+		stage('Sonar 2') {
+            steps {
+                echo 'Check Code Quality ...'
+				sh 'mvn sonar:sonar -Dsonar.host.url=$SONAR_ENDPOINT' // -Dsonar.dependencyCheck.reportPath=target/dependency-check-report.xml'
+            }
+        }
+		stage('Sonar 3') {
             steps {
                 echo 'Check Code Quality ...'
 				sh 'mvn sonar:sonar -Dsonar.host.url=$SONAR_ENDPOINT' // -Dsonar.dependencyCheck.reportPath=target/dependency-check-report.xml'
@@ -83,7 +95,7 @@ pipeline {
                 echo 'Testing application conformity according to its Swagger definition ...'
             }
         }
-*/
+
         stage('Bake') {
             steps {
 //			    sh 'echo \"Verification de la presence de l\'image Docker dans la registry locale (elle a du avoir le temps de se reconstruire ou se telecharger)\"'
@@ -99,14 +111,13 @@ pipeline {
 				sh 'docker push ${dockerRegistry}/${dockerRepo}:${package_version}'
             }
         }
-/*
+		
 		stage('Dependencies sync') {
             steps {
 				echo 'Copying the maven dependencies to an S3 bucket ...'
 				sh 'aws s3 sync $EC2_LOCAL_MAVEN_DEPENDENCIES_DIRECTORY $S3_BUCKET_MAVEN_DEPENDENCIES'
 			}
         }
-*/
     }
-
+*/
 }
