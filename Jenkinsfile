@@ -2,8 +2,8 @@ pipeline {
 	agent { 
         node {
             //label '!master'
-			label 'master'
-			//label 'slavespot'
+			//label 'master'
+			label 'slavespot'
         }
     }
 	
@@ -15,14 +15,13 @@ pipeline {
 		applicationName = 'springpetclinicb' // Same as artifactId in pom.xml
 		AWS_REGION = "eu-west-1"
 		AWS_ACCOUNT_ID = "962109799108"
-		SONAR_ENDPOINT = "http://34.242.31.110:9000"
+		SONAR_ENDPOINT = "http://52.208.39.65:9000"
 		EC2_LOCAL_MAVEN_DEPENDENCIES_DIRECTORY = "/home/ubuntu/.m2"
 		//EC2_LOCAL_MAVEN_DEPENDENCIES_DIRECTORY = "/var/lib/jenkins"
 		S3_BUCKET_MAVEN_DEPENDENCIES = "s3://jenkinsspotfleetmavencache/Jenkins-Master-slave-SimpleAPI/.m2/"
     }
-
+	
     stages {
-/*
 		stage('Download dependencies from S3') {
             steps {
 				echo 'Get the cached maven dependencies from an S3 bucket ...'
@@ -31,7 +30,7 @@ pipeline {
 			}
         }
 		
-	    stage('Prepa baking') {
+/*	    stage('Prepa baking') {
             steps {
                 echo 'Getting previous image ...'
 				sh 'echo \"Si l\'image cache n\'existe pas dans le repo ECR elle est reconstruire, sinon elle est telechargee\"'
@@ -44,7 +43,7 @@ pipeline {
             steps {
                 echo 'Building ...'
 				//sh 'mvn -T 10 -Dmaven.test.skip=true clean install'
-				//sh 'mvn -T 1C -Dmaven.test.skip=true dependency:purge-local-repository'
+				//sh 'mvn -T 1C -Dmaven.test.skip=true dependency:purge-local-repository clean package'
 				sh 'mvn -T 1C -Dmaven.test.skip=true clean package'
             }
         }
@@ -99,14 +98,13 @@ pipeline {
 				sh 'docker push ${dockerRegistry}/${dockerRepo}:${package_version}'
             }
         }
-/*
+		
 		stage('Dependencies sync') {
             steps {
 				echo 'Copying the maven dependencies to an S3 bucket ...'
 				sh 'aws s3 sync $EC2_LOCAL_MAVEN_DEPENDENCIES_DIRECTORY $S3_BUCKET_MAVEN_DEPENDENCIES'
 			}
         }
-*/
     }
 
 }
