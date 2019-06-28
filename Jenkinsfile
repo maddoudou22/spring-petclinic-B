@@ -62,27 +62,23 @@ pipeline {
 				sh 'mvn jar:jar deploy:deploy'
             }
         }
-		
-		stage('OWASP - Dependencies check') {
+*/		
+		stage('OWASP 1') {
             steps {
                 echo 'Check OWASP dependencies ...'
 				//sh 'mvn dependency-check:purge'
 				sh 'mvn dependency-check:check'
             }
         }
-*/		
-		stage('Sonar 1') {
+		
+		stage('OWASP 2') {
             steps {
-                echo 'Check Code Quality ...'
-				sh 'mvn sonar:sonar -Dsonar.host.url=$SONAR_ENDPOINT' // -Dsonar.dependencyCheck.reportPath=target/dependency-check-report.xml'
+                echo 'Check OWASP dependencies ...'
+				//sh 'mvn dependency-check:purge'
+				sh 'mvn dependency-check:check'
             }
         }
-		stage('Sonar 2') {
-            steps {
-                echo 'Check Code Quality ...'
-				sh 'mvn sonar:sonar -Dsonar.host.url=$SONAR_ENDPOINT' // -Dsonar.dependencyCheck.reportPath=target/dependency-check-report.xml'
-            }
-        }
+
 /*		
         stage('Contract testing') {
             steps {
