@@ -22,7 +22,7 @@ pipeline {
     }
 	
     stages {
-
+/*
 		stage('Download dependencies from S3') {
             steps {
 				echo 'Get the cached maven dependencies from an S3 bucket ...'
@@ -30,7 +30,7 @@ pipeline {
 				sh 'aws s3 sync $S3_BUCKET_MAVEN_DEPENDENCIES $EC2_LOCAL_MAVEN_DEPENDENCIES_DIRECTORY'
 			}
         }
-/*		
+		
 	    stage('Prepa baking') {
             steps {
                 echo 'Getting previous image ...'
@@ -112,13 +112,13 @@ pipeline {
 				sh 'docker push ${dockerRegistry}/${dockerRepo}:${package_version}'
             }
         }
-*/		
+		
 		stage('Dependencies sync') {
             steps {
 				echo 'Copying the maven dependencies to an S3 bucket ...'
 				sh 'aws s3 sync $EC2_LOCAL_MAVEN_DEPENDENCIES_DIRECTORY $S3_BUCKET_MAVEN_DEPENDENCIES'
 			}
         }
-
+*/
 	}
 }
