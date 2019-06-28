@@ -15,7 +15,7 @@ pipeline {
 		applicationName = 'springpetclinicb' // Same as artifactId in pom.xml
 		AWS_REGION = "eu-west-1"
 		AWS_ACCOUNT_ID = "962109799108"
-		SONAR_ENDPOINT = "http://34.244.167.220:9000"
+		SONAR_ENDPOINT = "http://34.242.31.110:9000"
 		EC2_LOCAL_MAVEN_DEPENDENCIES_DIRECTORY = "/home/ubuntu/.m2"
 		//EC2_LOCAL_MAVEN_DEPENDENCIES_DIRECTORY = "/var/lib/jenkins"
 		S3_BUCKET_MAVEN_DEPENDENCIES = "s3://jenkinsspotfleetmavencache/Jenkins-Master-slave-SimpleAPI/.m2/"
@@ -48,14 +48,14 @@ pipeline {
 				sh 'mvn -T 1C -Dmaven.test.skip=true clean package'
             }
         }
-/*		
+		
 		stage('Unit test') {
             steps {
                 echo 'Unit testing ...'
 				sh 'mvn -T 1C test'
             }
         }
-
+/*
 		stage('Publish snapshot') {
             steps {
                 echo 'Publising into the snapshot repo ...'
@@ -63,7 +63,7 @@ pipeline {
             }
         }
 */		
-		stage('OWASP 1') {
+		stage('OWASP - Dependencies check') {
             steps {
                 echo 'Check OWASP dependencies ...'
 				//sh 'mvn dependency-check:purge'
@@ -71,21 +71,19 @@ pipeline {
             }
         }
 		
-		stage('OWASP 2') {
+		stage('Sonar - Code Quality') {
             steps {
-                echo 'Check OWASP dependencies ...'
-				//sh 'mvn dependency-check:purge'
-				sh 'mvn dependency-check:check'
+                echo 'Check Code Quality ...'
+				sh 'mvn sonar:sonar -Dsonar.host.url=$SONAR_ENDPOINT' // -Dsonar.dependencyCheck.reportPath=target/dependency-check-report.xml'
             }
         }
-
 /*		
         stage('Contract testing') {
             steps {
                 echo 'Testing application conformity according to its Swagger definition ...'
             }
         }
-
+*/
         stage('Bake') {
             steps {
 //			    sh 'echo \"Verification de la presence de l\'image Docker dans la registry locale (elle a du avoir le temps de se reconstruire ou se telecharger)\"'
@@ -101,7 +99,7 @@ pipeline {
 				sh 'docker push ${dockerRegistry}/${dockerRepo}:${package_version}'
             }
         }
-
+/*
 		stage('Dependencies sync') {
             steps {
 				echo 'Copying the maven dependencies to an S3 bucket ...'
