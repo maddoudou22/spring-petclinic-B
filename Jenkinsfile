@@ -20,8 +20,9 @@ pipeline {
 		//EC2_LOCAL_MAVEN_DEPENDENCIES_DIRECTORY = "/var/lib/jenkins"
 		S3_BUCKET_MAVEN_DEPENDENCIES = "s3://jenkinsspotfleetmavencache/Jenkins-Master-slave-SimpleAPI/.m2/"
     }
-/*	
+	
     stages {
+/*
 		stage('Download dependencies from S3') {
             steps {
 				echo 'Get the cached maven dependencies from an S3 bucket ...'
@@ -73,20 +74,20 @@ pipeline {
 */		
 		stage('Sonar 1') {
             steps {
-                echo 'Check Code Quality ...'
+                echo 'Check Code Quality 1 ...'
 				sh 'mvn sonar:sonar -Dsonar.host.url=$SONAR_ENDPOINT' // -Dsonar.dependencyCheck.reportPath=target/dependency-check-report.xml'
             }
         }
 		stage('Sonar 2') {
             steps {
-                echo 'Check Code Quality ...'
-				sh 'mvn sonar:sonar -Dsonar.host.url=$SONAR_ENDPOINT' // -Dsonar.dependencyCheck.reportPath=target/dependency-check-report.xml'
+                echo 'Check Code Quality 2 ...'
+				sh 'mvn sonar:sonar -Dsonar.host.url=$SONAR_ENDPOINT' 
             }
         }
 		stage('Sonar 3') {
             steps {
-                echo 'Check Code Quality ...'
-				sh 'mvn sonar:sonar -Dsonar.host.url=$SONAR_ENDPOINT' // -Dsonar.dependencyCheck.reportPath=target/dependency-check-report.xml'
+                echo 'Check Code Quality 3 ...'
+				sh 'mvn sonar:sonar -Dsonar.host.url=$SONAR_ENDPOINT' // -Dsonar.dependencyCheck.reportPath
             }
         }
 /*		
